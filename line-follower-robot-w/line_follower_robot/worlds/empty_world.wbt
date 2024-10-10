@@ -1,0 +1,58 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position -0.00036201392305980216 0.0009109878201013431 1.8754243487863715
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+  floorAppearance NULL
+}
+Transform {
+  scale 0.0075 0.0075 0.0075
+  children [
+    Shape {
+      appearance PBRAppearance {
+      }
+      geometry Mesh {
+        url [
+          "../../meshes/tinker.obj"
+        ]
+      }
+    }
+  ]
+}
+E-puck {
+  hidden position_0_0 3.060719075696705e-08
+  hidden position_0_1 3.060717514575872e-08
+  hidden rotation_1 0 1 0 2.9802322387695313e-08
+  hidden rotation_2 0 1 0 2.9802322387695313e-08
+  translation -0.56 -0.23 -6.3962e-05
+  rotation 1 0 0 2.4431802199737966e-09
+  controller "lfr_py"
+  groundSensorsSlot [
+    DistanceSensor {
+      translation 0 0.01 0
+      rotation 0 1 0 1.5708
+      name "ir0"
+      type "infra-red"
+    }
+    DistanceSensor {
+      translation 0 -0.01 0
+      rotation 0 1 0 1.5708
+      name "ir1"
+      type "infra-red"
+    }
+  ]
+}
