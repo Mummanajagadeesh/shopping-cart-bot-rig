@@ -2,7 +2,7 @@ from roboflow import Roboflow
 import supervision as sv
 import cv2
 
-rf = Roboflow(api_key="W7Zp10EM8b5983DIhfmz")
+rf = Roboflow(api_key="") #W7Zp10EM8b5983DIhfmz
 project = rf.workspace().project("groceries-6pfog")
 model = project.version(6).model
 
