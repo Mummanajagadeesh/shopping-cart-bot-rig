@@ -2,7 +2,7 @@ import requests
 import cv2
 
 # Your OCR API key
-api_key = 'K89371958988957'
+# api_key = 'K89371958988957'
 
 # OCR API endpoint
 url = 'https://api.ocr.space/parse/image'
