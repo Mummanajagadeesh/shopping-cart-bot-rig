@@ -8,7 +8,7 @@ with open('ocr-detected-text.txt', 'r') as ocr_file:
 
 # API details
 url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent'
-api_key = 'AIzaSyDvDe7DO01mfWrUrcWFqLdZLKKPGC2X5uU'
+# api_key = 'AIzaSyDvDe7DO01mfWrUrcWFqLdZLKKPGC2X5uU'
 
 headers = {
     'Content-Type': 'application/json'
