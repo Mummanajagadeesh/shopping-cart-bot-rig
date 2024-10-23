@@ -5,7 +5,7 @@ import utlis
 
 ########################################################################
 webCamFeed = True
-pathImage = "ocr_test.jpg"
+pathImage = "captured_photo.jpg"
 # cap = cv2.VideoCapture("http://192.0.0.4:8080/video")
 # cap.set(10,160)
 heightImg = 640

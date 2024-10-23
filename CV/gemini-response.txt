@@ -4,7 +4,7 @@
             "content": {
                 "parts": [
                     {
-                        "text": "```python\nproduct_info = [\"iPad Retina Display\", \"Tablet\", \"0012458695691\", 1, None, 0]\n``` \n\n**Explanation:**\n\n* **Product Name:**  \"IPad retina Display\" is corrected from the detected \"IPad fietlna Dlgp!ay\" based on the expected text and the barcode information (which likely refers to an iPad product).\n* **Type Category:**  Assuming this is a tablet, \"Tablet\" is assigned.\n* **Barcode:** The barcode value \"0012458695691\" is directly taken from the detected text.\n* **Quantity:** Assuming a single unit, \"1\" is assigned.\n* **Price:**  Since no price information is available, \"None\" is assigned.\n* **Rating:** No rating information is available, \"0\" is assigned. \n"
+                        "text": "```python\nproduct_info = [\"Unknown\", \"Unknown\", \"XXXXXXXXXX\", 1, \"XXX\", 0]\n```\n\n**Explanation:**\n\n* **No Text Detected:** The provided text only contains instructions and warnings about barcode validation.  It doesn't contain any product information to extract. \n* **Default Values:** Since no product information is available, we use the default values for each field as instructed.\n* **Barcode Validation:** The instructions emphasize the importance of barcode validation, which is crucial for accurately identifying products. However, without the actual barcode information, we can't perform this validation.\n\n**Important Note:** To generate a valid `product_info` list, you need to provide the text extracted from the scanned label **including the actual product details and the barcode**.  \n"
                     }
                 ],
                 "role": "model"
@@ -32,8 +32,8 @@
         }
     ],
     "usageMetadata": {
-        "promptTokenCount": 241,
-        "candidatesTokenCount": 195,
-        "totalTokenCount": 436
+        "promptTokenCount": 322,
+        "candidatesTokenCount": 164,
+        "totalTokenCount": 486
     }
 }

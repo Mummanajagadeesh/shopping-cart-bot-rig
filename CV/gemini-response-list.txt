@@ -1,1 +1,1 @@
-["iPad Retina Display", "Tablet", "0012458695691", 1, None, 0]
+["Unknown", "Unknown", "XXXXXXXXXX", 1, "XXX", 0]

@@ -1,110 +1,100 @@
 import sys
 import time
+from PyQt5 import QtWidgets, QtCore, QtGui
+import cv2
 import threading
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QImage, QPixmap
-from PyQt5.QtCore import QTimer
-from scanner import Scanner
-from scanned_new import scan_and_save_final_image
-from ocr_detect import detect_text_in_image
-from gemini_api import spell_correct_and_process
-from qr_code_updated import generate_qr_code, products
+import subprocess
 
-class LabelScannerApp(QMainWindow):
+class LabelScannerApp(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        
-        self.initUI()
-        self.timer = QTimer()
-        self.timer.setInterval(10000)  # 10 seconds for automatic calibration
-        self.timer.timeout.connect(self.auto_finalize_scan)
 
-        self.product_count = 0  # Track the number of products scanned
-
-    def initUI(self):
-        self.setWindowTitle('Product Label Scanner')
+        # Main window settings
+        self.setWindowTitle("Label Scanner & Payment System")
         self.setGeometry(100, 100, 800, 600)
 
-        # Set up layout
-        self.layout = QVBoxLayout()
+        # Timer for auto calibration (10 seconds)
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.capture_image)
 
-        # Labels to show information
-        self.scan_image_label = QLabel('Scanned Image will appear here', self)
-        self.ocr_text_label = QLabel('OCR Text will appear here', self)
-        self.product_info_label = QLabel('Product Info will appear here', self)
-        self.qr_code_label = QLabel('QR Code will appear here', self)
+        # Scan label button
+        self.scan_button = QtWidgets.QPushButton("Scan Label", self)
+        self.scan_button.setGeometry(50, 50, 200, 50)
+        self.scan_button.clicked.connect(self.start_scanning)
 
-        # Buttons
-        self.scan_button = QPushButton('Scan Label', self)
-        self.scan_button.clicked.connect(self.start_scan)
-
-        self.ocr_button = QPushButton('OCR Detect Text', self)
+        # Detect text button
+        self.ocr_button = QtWidgets.QPushButton("Detect Text (OCR)", self)
+        self.ocr_button.setGeometry(50, 120, 200, 50)
         self.ocr_button.clicked.connect(self.detect_text)
 
-        self.process_button = QPushButton('Process Product Info', self)
-        self.process_button.clicked.connect(self.process_product)
+        # Correct text button
+        self.gemini_button = QtWidgets.QPushButton("Correct Text (Gemini API)", self)
+        self.gemini_button.setGeometry(50, 190, 200, 50)
+        self.gemini_button.clicked.connect(self.correct_text)
 
-        self.qr_button = QPushButton('Generate QR Code', self)
-        self.qr_button.clicked.connect(self.generate_qr)
+        # Generate QR code button
+        self.qr_button = QtWidgets.QPushButton("Generate QR Code", self)
+        self.qr_button.setGeometry(50, 260, 200, 50)
+        self.qr_button.clicked.connect(self.generate_qr_code)
 
-        # Adding widgets to layout
-        self.layout.addWidget(self.scan_image_label)
-        self.layout.addWidget(self.scan_button)
-        self.layout.addWidget(self.ocr_text_label)
-        self.layout.addWidget(self.ocr_button)
-        self.layout.addWidget(self.product_info_label)
-        self.layout.addWidget(self.process_button)
-        self.layout.addWidget(self.qr_code_label)
-        self.layout.addWidget(self.qr_button)
+        # Output text area for OCR results
+        self.ocr_output = QtWidgets.QTextEdit(self)
+        self.ocr_output.setGeometry(300, 50, 400, 100)
+        self.ocr_output.setReadOnly(True)
 
-        # Set central widget and layout
-        container = QWidget()
-        container.setLayout(self.layout)
-        self.setCentralWidget(container)
+        # Output area for product information and QR code
+        self.product_info = QtWidgets.QTextEdit(self)
+        self.product_info.setGeometry(300, 180, 400, 150)
+        self.product_info.setReadOnly(True)
 
-    def start_scan(self):
-        # Step 1: Scan the label
-        self.timer.start()  # Start the 10-second timer for calibration
-        self.scanner_thread = threading.Thread(target=self.calibrate_and_scan)
-        self.scanner_thread.start()
+        # Placeholder for the scanned image
+        self.image_label = QtWidgets.QLabel(self)
+        self.image_label.setGeometry(300, 350, 400, 200)
+        self.image_label.setStyleSheet("border: 1px solid black")
 
-    def calibrate_and_scan(self):
-        scanner = Scanner()
-        scanner.run()  # Assuming it opens trackbars and runs scanner.py logic
+    def start_scanning(self):
+        self.timer.start(10000)  # Start a 10-second timer for scanning calibration
+        self.ocr_output.setText("Scanning in progress...")
 
-    def auto_finalize_scan(self):
-        # Finalize after 10 seconds
-        self.timer.stop()
-        scan_and_save_final_image()  # Using scanned_new.py logic to save image
-        self.display_image('scanned_label.jpg')
+    def capture_image(self):
+        self.timer.stop()  # Stop the timer after 10 seconds
 
-    def display_image(self, image_path):
-        image = QImage(image_path)
-        pixmap = QPixmap.fromImage(image)
-        self.scan_image_label.setPixmap(pixmap)
+        # Call your scanner.py code here to capture image and save as scanned_label.jpg
+        subprocess.call(['python3', 'scanned_new.py'])
+
+        # Display the scanned image
+        pixmap = QtGui.QPixmap("scanned_label.jpg")
+        self.image_label.setPixmap(pixmap.scaled(400, 200, QtCore.Qt.KeepAspectRatio))
+        self.ocr_output.setText("Label scanned. Ready for OCR.")
 
     def detect_text(self):
-        # Step 2: OCR detection
-        detected_text = detect_text_in_image('scanned_label.jpg')
-        self.ocr_text_label.setText(detected_text)
+        # Call your OCR detection code here
+        subprocess.call(['python3', 'ocr_detect.py'])
 
-    def process_product(self):
-        # Step 3: Process text with gemini API
-        product_data = spell_correct_and_process('ocr-detected-text.txt')
-        # Append product details to global dictionary
-        self.product_count += 1
-        products[self.product_count] = product_data
-        self.product_info_label.setText(str(product_data))
+        # Load the detected text and display
+        with open("ocr-detected-text.txt", "r") as file:
+            ocr_data = file.read()
+        self.ocr_output.setText(ocr_data)
 
-    def generate_qr(self):
-        # Step 4: Generate QR code
-        generate_qr_code(products)
-        self.qr_code_label.setText('QR Code generated for UPI payment!')
+    def correct_text(self):
+        # Call your Gemini API correction script
+        subprocess.call(['python3', 'gemini-api.py'])
 
-def main():
-    app = QApplication(sys.argv)
-    ex = LabelScannerApp()
-    ex.show()
+        # Load the corrected text and display
+        with open("gemini-response-list.txt", "r") as file:
+            corrected_data = file.read()
+        self.product_info.setText(corrected_data)
+
+    def generate_qr_code(self):
+        # Call the QR code generation script
+        subprocess.call(['python3', 'qr_code_updated.py'])
+
+        # Load and display the generated QR code
+        pixmap = QtGui.QPixmap("generated_qr_code.png")
+        self.image_label.setPixmap(pixmap.scaled(400, 200, QtCore.Qt.KeepAspectRatio))
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = LabelScannerApp()
+    window.show()
     sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()

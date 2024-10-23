@@ -1,10 +1,21 @@
+import pytesseract
+from PIL import Image
 import requests
 import json
-import re  # For searching the list format
+import re
 
-# Step 1: Read text from ocr-detected-text.txt
-with open('ocr-detected-text.txt', 'r') as ocr_file:
-    ocr_text = ocr_file.read().strip()
+# Step 1: Extract text from the image using pytesseract
+image_path = 'scanned_label.jpg'  # Change this to the path of your image
+
+# Open image using PIL
+image = Image.open(image_path)
+
+# Use pytesseract to do OCR on the image
+ocr_text = pytesseract.image_to_string(image).strip()
+
+# Save the OCR detected text for debugging if needed
+with open('ocr-detected-text.txt', 'w') as ocr_file:
+    ocr_file.write(ocr_text)
 
 # API details
 url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent'
@@ -36,11 +47,11 @@ product_info = ["Apple", "Food", "123456789", 4, 50, 15]
 name = Apple , category = Food , Barcode = 123456789 , Quantity = 4 , Price = 50 , discount = 15
 
 
-Use the barcode information for accuracy improvement, and feel free to search for details online, alwtys cross check info with checking barcode for second opinion if barcode is found readily in label
+Use the barcode information for accuracy improvement, and feel free to search for details online, always cross-check info with checking barcode for second opinion if barcode is found readily in label
 
 default values if any of the field is empty;
     name = "Unknown"
-    category = "Unkownn"
+    category = "Unknown"
     barcode = XXXXXXXXX
     quantity = 1
     price = XXX
