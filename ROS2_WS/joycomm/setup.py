@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "joy_controller = joycomm.joy_controller:main"
+            "joy_controller = joycomm.joy_controller:main",
+            "joy_ctrl_esp32 = joycomm.joy_ctrl_esp32:main"
         ],
     },
 )
