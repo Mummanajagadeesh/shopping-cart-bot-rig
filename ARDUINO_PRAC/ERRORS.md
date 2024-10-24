@@ -1,3 +1,5 @@
+# FOR EXP32
+
 error in Arduino IDE trying to use it with ESP32
 
 exec: "python": executable file not found in $PATH Compilation error: exec: "python": executable file not found in $PATH
