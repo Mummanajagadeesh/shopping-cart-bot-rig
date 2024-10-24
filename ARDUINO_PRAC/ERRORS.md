@@ -1,4 +1,4 @@
-# FOR EXP32
+# FOR ESP32
 
 error in Arduino IDE trying to use it with ESP32
 
