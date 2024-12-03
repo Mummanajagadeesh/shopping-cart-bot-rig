@@ -21,7 +21,8 @@ setup(
     entry_points={
         'console_scripts': [
             "joy_controller = joycomm.joy_controller:main",
-            "joy_ctrl_esp32 = joycomm.joy_ctrl_esp32:main"
+            "joy_ctrl_esp32 = joycomm.joy_ctrl_esp32:main",
+            "diff_drive_ctrl = joycomm.diff_drive_ctrl:main"
         ],
     },
 )
